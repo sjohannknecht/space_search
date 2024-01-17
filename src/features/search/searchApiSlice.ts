@@ -4,10 +4,15 @@ interface SearchResultApiResponseInterface {
   collection: SearchResultCollectionInterface
 }
 
-interface SearchResultCollectionInterface {
+export interface SearchResultCollectionInterface {
   version: string
   href: string
   items: SearchResultItemInterface[]
+  metadata: MetaData
+}
+
+interface MetaData {
+  total_hits: number
 }
 
 export interface SearchResultItemInterface {
@@ -39,7 +44,7 @@ export const searchApiSlice = createApi({
   reducerPath: "searchResultApi",
   endpoints: build => ({
     getSearchResult: build.query<SearchResultApiResponseInterface, string>({
-      query: (search_param = "lyra") => `search?q=${search_param}`,
+      query: (searchParam = "") => `search?q=${searchParam}`,
     }),
   }),
 })
