@@ -1,3 +1,30 @@
 .App {
+  color: white;
+  background-color: black;
+  background-image: url("assets/img/stars.png");
+  background-attachment: fixed;
+  min-height: 100vh;
   text-align: center;
+}
+
+.App__Search--foreground {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes parallax {
+  to {
+    transform: translateY(-2000px) translateX(-1000px);
+  }
+}
+
+.App__bg-img-iss {
+  animation: parallax linear;
+  /* Animation-timeline makes the ISS image move while scrolling. It's not supported by Safari and Firefox yet. */
+  animation-timeline: scroll();
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 30%;
+  z-index: 1;
 }

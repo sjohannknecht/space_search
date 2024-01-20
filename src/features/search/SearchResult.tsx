@@ -1,18 +1,34 @@
-import type { SearchResultCollectionInterface } from "./searchApiSlice"
 import SearchResultItem from "./SearchResultItem"
+import "./SearchResult.css"
+import { type SearchResultItemInterface } from "./searchApiSlice"
 
 interface SearchResultProps {
-  collection: SearchResultCollectionInterface
+  result: any
 }
-function SearchResult({ collection }: SearchResultProps) {
+function SearchResult({ result }: SearchResultProps) {
+  if (result.isError) {
+    return <h2>There was an error!!!</h2>
+  }
+
+  if (result.isLoading || result.isFetching) {
+    return <h2>Loading...</h2>
+  }
+
   return (
-    <div>
-      {collection.metadata.total_hits === 0 ? (
+    <div className="SearchResult">
+      {result.data.collection.metadata.total_hits === 0 ? (
         <p>No Results</p>
       ) : (
-        collection.items.map(element => (
-          <SearchResultItem item={element}></SearchResultItem>
-        ))
+        <>
+          {result.data.collection.items.map(
+            (element: SearchResultItemInterface) => (
+              <SearchResultItem
+                item={element}
+                key={element.data[0].nasa_id}
+              ></SearchResultItem>
+            ),
+          )}
+        </>
       )}
     </div>
   )

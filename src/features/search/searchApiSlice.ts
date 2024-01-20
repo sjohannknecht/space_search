@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
-interface SearchResultApiResponseInterface {
+export interface SearchResultApiResponseInterface {
   collection: SearchResultCollectionInterface
 }
 
-export interface SearchResultCollectionInterface {
+interface SearchResultCollectionInterface {
   version: string
   href: string
   items: SearchResultItemInterface[]

@@ -1,12 +1,21 @@
 import type { SearchResultItemInterface } from "./searchApiSlice"
+import "./SearchResultItem.css"
 
 interface SearchResultItemProps {
   item: SearchResultItemInterface
 }
 function SearchResultItem({ item }: SearchResultItemProps) {
+  const data = item.data[0]
+  const previewImgHref = item.links ? item.links[0].href : undefined
+
   return (
-    <div>
-      <h3>{item.data[0].title}</h3>
+    <div className="SearchResultItem">
+      <h3 className="SearchResultItem__heading">{data.title}</h3>
+      <img
+        src={previewImgHref}
+        alt={data.description_508}
+        className="SearchResultItem__img"
+      />
     </div>
   )
 }

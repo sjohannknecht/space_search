@@ -1,9 +1,13 @@
 import { useLazyGetSearchResultQuery } from "./searchApiSlice"
-import styles from "./Search.module.css"
+import "./Search.css"
 import SearchResult from "./SearchResult"
 import SearchBar from "./SearchBar"
 
-function Search() {
+interface SearchInterface {
+  className: string
+}
+
+function Search({ className }: SearchInterface) {
   const [trigger, result] = useLazyGetSearchResultQuery()
 
   const fetchResults = (textInput: string) => {
@@ -12,31 +16,16 @@ function Search() {
     }
   }
 
-  if (result.isError) {
-    return (
-      <div>
-        <h1>There was an error!!!</h1>
-      </div>
-    )
-  }
-
-  if (result.isLoading) {
-    return (
-      <div>
-        <h1>Loading...</h1>
-      </div>
-    )
-  }
-
   console.log(result)
 
   return (
-    <div className={styles.container}>
-      <h1>Search</h1>
-      <SearchBar fetchResults={fetchResults}></SearchBar>
-      {!result.isUninitialized && (
-        <SearchResult collection={result.data.collection}></SearchResult>
-      )}
+    <div className={`Search ${className}`}>
+      <header>
+        <h1>Space Search</h1>
+        <SearchBar fetchResults={fetchResults}></SearchBar>
+        <p>This page is querying the NASA Image and Video Library API</p>
+      </header>
+      {!result.isUninitialized && <SearchResult result={result}></SearchResult>}
     </div>
   )
 }

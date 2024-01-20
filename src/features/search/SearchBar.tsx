@@ -1,4 +1,5 @@
 import { type ChangeEvent, type FormEventHandler, useState } from "react"
+import "./SearchBar.css"
 
 interface SearchBarProps {
   fetchResults: (textInput: string) => void
@@ -10,7 +11,6 @@ function SearchBar({ fetchResults }: SearchBarProps) {
   const handleSubmit: FormEventHandler<HTMLFormElement> | undefined = e => {
     e.preventDefault()
     fetchResults(textInput)
-    setTextInput("")
   }
 
   const handleInput: FormEventHandler<HTMLInputElement> | undefined = (
@@ -20,12 +20,17 @@ function SearchBar({ fetchResults }: SearchBarProps) {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input type="text" value={textInput} onInput={handleInput} />
-        <button type="submit">Search</button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit} className="SearchBar">
+      <input
+        type="text"
+        value={textInput}
+        onInput={handleInput}
+        className="SearchBar__input SearchBar__item"
+      />
+      <button type="submit" className="SearchBar__item">
+        Search
+      </button>
+    </form>
   )
 }
 
