@@ -3,8 +3,7 @@
 }
 
 .SearchBar__input {
-  width: 50%;
-  min-width: 200px;
+  width: clamp(200px, 50%, 600px);
   margin-right: 10px;
 }
 
@@ -19,8 +18,11 @@
 .SearchBar__item:hover,
 .SearchBar__item:focus {
   background-color: hsla(0, 100%, 100%, 0.3);
-  cursor: pointer;
   outline: none;
+}
+
+.SearchBar__item--pointer:hover {
+  cursor: pointer;
 }
 
 .SearchBar__item:active {

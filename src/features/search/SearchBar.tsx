@@ -27,7 +27,10 @@ function SearchBar({ fetchResults }: SearchBarProps) {
         onInput={handleInput}
         className="SearchBar__input SearchBar__item"
       />
-      <button type="submit" className="SearchBar__item">
+      <button
+        type="submit"
+        className="SearchBar__item SearchBar__item--pointer"
+      >
         Search
       </button>
     </form>
