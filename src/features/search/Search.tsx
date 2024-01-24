@@ -1,4 +1,4 @@
-import { useLazyGetSearchResultQuery } from "./searchApiSlice"
+import { useLazyGetSearchQuery } from "./searchApiSlice"
 import "./Search.css"
 import SearchResult from "./SearchResult"
 import SearchBar from "./SearchBar"
@@ -8,15 +8,13 @@ interface SearchInterface {
 }
 
 function Search({ className }: SearchInterface) {
-  const [trigger, result] = useLazyGetSearchResultQuery()
+  const [trigger, result] = useLazyGetSearchQuery()
 
   const fetchResults = (textInput: string) => {
     if (textInput !== "") {
       trigger(textInput)
     }
   }
-
-  console.log(result)
 
   return (
     <div className={`Search ${className}`}>

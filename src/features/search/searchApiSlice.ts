@@ -1,27 +1,23 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
-export interface SearchResultApiResponseInterface {
-  collection: SearchResultCollectionInterface
+export interface SearchApiResponse {
+  collection: {
+    version: string
+    href: string
+    items: SearchItem[]
+    metadata: {
+      total_hits: number
+    }
+  }
 }
 
-interface SearchResultCollectionInterface {
-  version: string
+export interface SearchItem {
   href: string
-  items: SearchResultItemInterface[]
-  metadata: MetaData
+  data: SearchItemData[]
+  links: SearchItemLink[]
 }
 
-interface MetaData {
-  total_hits: number
-}
-
-export interface SearchResultItemInterface {
-  href: string
-  data: SearchResultItemDataInterface[]
-  links: SearchResultItemLinkInterface[]
-}
-
-interface SearchResultItemDataInterface {
+interface SearchItemData {
   center: string
   title: string
   nasa_id: string
@@ -33,7 +29,7 @@ interface SearchResultItemDataInterface {
   description: string
 }
 
-interface SearchResultItemLinkInterface {
+interface SearchItemLink {
   href: string
   rel: string
   render: string
@@ -41,12 +37,12 @@ interface SearchResultItemLinkInterface {
 
 export const searchApiSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "https://images-api.nasa.gov" }),
-  reducerPath: "searchResultApi",
+  reducerPath: "searchApi",
   endpoints: build => ({
-    getSearchResult: build.query<SearchResultApiResponseInterface, string>({
+    getSearch: build.query<SearchApiResponse, string>({
       query: (searchParam = "") => `search?q=${searchParam}`,
     }),
   }),
 })
 
-export const { useLazyGetSearchResultQuery } = searchApiSlice
+export const { useLazyGetSearchQuery } = searchApiSlice
