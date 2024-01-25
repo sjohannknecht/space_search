@@ -1,4 +1,5 @@
 import { isRouteErrorResponse, useRouteError } from "react-router-dom"
+import "./ErrorPage.css"
 
 function ErrorPage() {
   const error = useRouteError()
@@ -16,7 +17,7 @@ function ErrorPage() {
     }
   }
 
-  return <h1>{errorMessage(error)}</h1>
+  return <div className="ErrorPage"><h1>{errorMessage(error)}</h1></div>
 }
 
 export default ErrorPage
