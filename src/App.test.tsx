@@ -1,16 +1,18 @@
 import { render, screen } from "@testing-library/react"
 import App from "./App"
+import { BrowserRouter } from "react-router-dom"
 
-describe("SearchResult", () => {
+describe("App", () => {
   afterEach(() => {
     vi.restoreAllMocks()
   })
 
-  test("renders SearchResultItem when there are search hits", () => {
-    vi.mock("./features/search/Search.tsx", () => ({
-      default: () => <div>SearchMock</div>,
+  test("renders the background image of the ISS", () => {
+    vi.mock("./features/search/SearchBar.tsx", () => ({
+      default: () => <div>SearchBarMock</div>,
     }))
-    render(<App />)
+    render(<App />, { wrapper: BrowserRouter })
+
     const img = screen.getByRole("img")
     expect(img).toBeInTheDocument()
     expect(img).toHaveAttribute("alt", "ISS")
@@ -20,11 +22,21 @@ describe("SearchResult", () => {
     )
   })
 
-  test("renders SearchResultItem when there are search hits", () => {
-    vi.mock("./features/search/Search.tsx", () => ({
-      default: () => <div>SearchMock</div>,
+  test("renders Heading", () => {
+    vi.mock("./features/search/SearchBar.tsx", () => ({
+      default: () => <div>SearchBarMock</div>,
     }))
-    render(<App />)
-    expect(screen.queryByText(/searchMock/i)).toBeInTheDocument()
+    render(<App />, { wrapper: BrowserRouter })
+
+    expect(screen.getByRole("heading").textContent).toMatch(/space search/i)
+  })
+
+  test("renders SearchBar", () => {
+    vi.mock("./features/search/SearchBar.tsx", () => ({
+      default: () => <div>SearchBarMock</div>,
+    }))
+    render(<App />, { wrapper: BrowserRouter })
+
+    expect(screen.queryByText(/searchBarMock/i)).toBeInTheDocument()
   })
 })

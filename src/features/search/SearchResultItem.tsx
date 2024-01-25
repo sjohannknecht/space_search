@@ -1,8 +1,8 @@
-import type { SearchResultItemInterface } from "./searchApiSlice"
+import type { SearchItem } from "./searchApiSlice"
 import "./SearchResultItem.css"
 
 interface SearchResultItemProps {
-  item: SearchResultItemInterface
+  item: SearchItem
 }
 function SearchResultItem({ item }: SearchResultItemProps) {
   const data = item.data[0]

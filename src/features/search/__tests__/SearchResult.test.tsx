@@ -1,79 +1,94 @@
-import { render, screen } from "@testing-library/react"
+import { screen, waitFor } from "@testing-library/react"
 import SearchResult from "../SearchResult"
+import { renderWithProviders } from "../../../utils/test-utils"
+import { setupServer } from "msw/node"
+import { http, HttpResponse } from "msw"
+import { searchResultHits, searchResultNoHits } from "./__mocks__/searchMocks"
+import { MemoryRouter } from "react-router-dom"
 
 describe("SearchResult", () => {
+  const server = setupServer()
+
+  beforeAll(() => server.listen())
+
+  afterAll(() => server.close())
+
+  afterEach(() => server.resetHandlers())
+
   afterEach(() => {
     vi.restoreAllMocks()
   })
 
-  test("renders Error message when result.isError", () => {
-    const result = {
-      isError: true,
-    }
-    render(<SearchResult result={result} />)
-
-    expect(screen.getByRole("heading").textContent).toMatch(
-      /there was an error!!!/i,
+  test("renders Error message when server responds with error code", async () => {
+    server.use(
+      http.get("https://images-api.nasa.gov/search", () =>
+        HttpResponse.error(),
+      ),
     )
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/search?q=test"]}>
+        <SearchResult />
+      </MemoryRouter>,
+    )
+
+    await waitFor(() => {
+      expect(screen.getByRole("heading").textContent).toMatch(
+        /there was an error!!!/i,
+      )
+    })
   })
 
-  test("renders Loading message when result.isLoading is true", () => {
-    const result = {
-      isLoading: true,
-    }
-    render(<SearchResult result={result} />)
+  test("renders null when query was not initialized because of missing searchParam for example", async () => {
+    server.use(
+      http.get("https://images-api.nasa.gov/search", () =>
+        HttpResponse.json(searchResultNoHits),
+      ),
+    )
+    const { container } = renderWithProviders(
+      <MemoryRouter initialEntries={["/search"]}>
+        <SearchResult />
+      </MemoryRouter>,
+    )
 
-    expect(screen.getByRole("heading").textContent).toMatch(/loading.../i)
+    await waitFor(() => {
+      expect(container).toBeEmptyDOMElement()
+    })
   })
 
-  test("renders Loading message when result.isFetching is true", () => {
-    const result = {
-      isFetching: true,
-    }
-    render(<SearchResult result={result} />)
+  test("renders No Result message when there are no search hits", async () => {
+    server.use(
+      http.get("https://images-api.nasa.gov/search", () =>
+        HttpResponse.json(searchResultNoHits),
+      ),
+    )
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/search?q=test"]}>
+        <SearchResult />
+      </MemoryRouter>,
+    )
 
-    expect(screen.getByRole("heading").textContent).toMatch(/loading.../i)
+    await waitFor(() => {
+      expect(screen.queryByText(/no results/i)).toBeInTheDocument()
+    })
   })
 
-  test("renders No Result message when there are no search hits", () => {
-    const result = {
-      data: {
-        collection: {
-          metadata: {
-            total_hits: 0,
-          },
-        },
-      },
-    }
-    render(<SearchResult result={result} />)
-
-    expect(screen.queryByText(/no results/i)).toBeInTheDocument()
-  })
-
-  test("renders SearchResultItem when there are search hits", () => {
+  test("renders SearchResultItem when there are search hits", async () => {
+    server.use(
+      http.get("https://images-api.nasa.gov/search", () =>
+        HttpResponse.json(searchResultHits),
+      ),
+    )
     vi.mock("../SearchResultItem.tsx", () => ({
       default: () => <div>SearchResultItemMock</div>,
     }))
-    const result = {
-      data: {
-        collection: {
-          items: [
-            {
-              data: [
-                {
-                  nasa_id: "test",
-                },
-              ],
-            },
-          ],
-          metadata: {
-            total_hits: 1,
-          },
-        },
-      },
-    }
-    render(<SearchResult result={result} />)
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/search?q=test"]}>
+        <SearchResult />
+      </MemoryRouter>,
+    )
 
-    expect(screen.queryByText(/searchResultItemMock/i)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.queryByText(/searchResultItemMock/i)).toBeInTheDocument()
+    })
   })
 })

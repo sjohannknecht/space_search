@@ -11,6 +11,10 @@
   background-color: hsla(0, 100%, 100%, 0.3);
 }
 
+.SearchResultItem__heading {
+  overflow-wrap: break-word;
+}
+
 .SearchResultItem__img {
   max-width: 100%;
   max-height: 300px;

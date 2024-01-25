@@ -3,8 +3,25 @@ import { createRoot } from "react-dom/client"
 import { Provider } from "react-redux"
 import App from "./App"
 import { store } from "./app/store"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import "./normalize.css"
 import "./index.css"
+import SearchResult from "./features/search/SearchResult"
+import ErrorPage from "./components/ErrorPage"
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "search",
+        element: <SearchResult />,
+      },
+    ],
+    errorElement: <ErrorPage></ErrorPage>,
+  },
+])
 
 const container = document.getElementById("root")
 
@@ -14,7 +31,7 @@ if (container) {
   root.render(
     <React.StrictMode>
       <Provider store={store}>
-        <App />
+        <RouterProvider router={router} />
       </Provider>
     </React.StrictMode>,
   )
