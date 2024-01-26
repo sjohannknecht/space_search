@@ -1,16 +1,19 @@
 import "./App.css"
 import issUrl from "./assets/img/ISS_spacecraft_model_1.png"
-import { Outlet, useNavigate, useSearchParams } from "react-router-dom"
+import { createSearchParams, Link, Outlet, useNavigate } from "react-router-dom"
 import SearchBar from "./features/search/SearchBar"
 
 const App = () => {
   const navigate = useNavigate()
-  const [, setSearchParams] = useSearchParams()
 
   const fetchResults = (textInput: string) => {
     if (textInput !== "") {
-      navigate("/search")
-      setSearchParams({ q: textInput })
+      navigate({
+        pathname: "/search",
+        search: createSearchParams({
+          q: textInput,
+        }).toString(),
+      })
     }
   }
 
@@ -18,7 +21,9 @@ const App = () => {
     <div className="App">
       <div className="App__Search App__Search--foreground">
         <header>
-          <h1>Space Search</h1>
+          <Link to={"/"} className="Link">
+            <h1>Space Search</h1>
+          </Link>
           <SearchBar fetchResults={fetchResults}></SearchBar>
           <p>This page is querying the NASA Image and Video Library API</p>
         </header>

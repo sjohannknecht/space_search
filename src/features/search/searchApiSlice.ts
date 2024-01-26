@@ -35,6 +35,37 @@ interface SearchItemLink {
   render: string
 }
 
+export interface EntryResponse {
+  collection: {
+    version: string
+    href: string
+    items: EntryItem[]
+    metadata: {
+      total_hits: number
+    }
+  }
+}
+
+export interface EntryItem {
+  href: string
+  data: EntryItemData[]
+  links: SearchItemLink[]
+}
+
+interface EntryItemData {
+  description: string
+  title: string
+  photographer: string
+  location: string
+  nasa_id: string
+  media_type: string
+  keywords: string[]
+  date_created: string
+  description_508: string
+  secondary_creator: string
+  center: string
+}
+
 interface AssetResponse {
   collection: {
     version: string
@@ -54,10 +85,14 @@ export const searchApiSlice = createApi({
     getSearch: build.query<SearchResponse, string>({
       query: (searchParam = "") => `search?q=${searchParam}`,
     }),
+    getEntry: build.query<EntryResponse, string>({
+      query: (nasaId = "") => `search?nasa_id=${nasaId}`,
+    }),
     getAsset: build.query<AssetResponse, string>({
-      query: (assetId = "") => `asset/${assetId}`,
+      query: (nasaId = "") => `asset/${nasaId}`,
     }),
   }),
 })
 
-export const { useGetSearchQuery } = searchApiSlice
+export const { useGetSearchQuery, useGetAssetQuery, useGetEntryQuery } =
+  searchApiSlice

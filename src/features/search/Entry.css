@@ -1,0 +1,24 @@
+.Entry {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+@media (max-width: 1000px) {
+  .Entry {
+    flex-direction: column;
+  }
+}
+
+.Entry__media-container {
+  flex: 1;
+}
+
+.Entry__media {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+.Entry__info {
+  flex: 1;
+}

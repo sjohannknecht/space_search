@@ -8,6 +8,7 @@ import "./normalize.css"
 import "./index.css"
 import SearchResult from "./features/search/SearchResult"
 import ErrorPage from "./components/ErrorPage"
+import Entry from "./features/search/Entry"
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: "search",
         element: <SearchResult />,
+      },
+      {
+        path: "entry",
+        element: <Entry />,
       },
     ],
     errorElement: <ErrorPage></ErrorPage>,

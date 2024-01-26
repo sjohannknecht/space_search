@@ -3,7 +3,10 @@ import SearchResult from "../SearchResult"
 import { renderWithProviders } from "../../../utils/test-utils"
 import { setupServer } from "msw/node"
 import { http, HttpResponse } from "msw"
-import { searchResultHits, searchResultNoHits } from "./__mocks__/searchMocks"
+import {
+  searchResponseHits,
+  searchResponseNoHits,
+} from "./__mocks__/searchMocks"
 import { MemoryRouter } from "react-router-dom"
 
 describe("SearchResult", () => {
@@ -41,7 +44,7 @@ describe("SearchResult", () => {
   test("renders null when query was not initialized because of missing searchParam for example", async () => {
     server.use(
       http.get("https://images-api.nasa.gov/search", () =>
-        HttpResponse.json(searchResultNoHits),
+        HttpResponse.json(searchResponseNoHits),
       ),
     )
     const { container } = renderWithProviders(
@@ -58,7 +61,7 @@ describe("SearchResult", () => {
   test("renders No Result message when there are no search hits", async () => {
     server.use(
       http.get("https://images-api.nasa.gov/search", () =>
-        HttpResponse.json(searchResultNoHits),
+        HttpResponse.json(searchResponseNoHits),
       ),
     )
     renderWithProviders(
@@ -75,7 +78,7 @@ describe("SearchResult", () => {
   test("renders SearchResultItem when there are search hits", async () => {
     server.use(
       http.get("https://images-api.nasa.gov/search", () =>
-        HttpResponse.json(searchResultHits),
+        HttpResponse.json(searchResponseHits),
       ),
     )
     vi.mock("../SearchResultItem.tsx", () => ({

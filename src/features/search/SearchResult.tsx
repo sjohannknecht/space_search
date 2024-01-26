@@ -1,16 +1,16 @@
 import SearchResultItem from "./SearchResultItem"
 import "./SearchResult.css"
 import { type SearchItem, useGetSearchQuery } from "./searchApiSlice"
-import { useSearchParams } from "react-router-dom"
+import { createSearchParams, Link, useSearchParams } from "react-router-dom"
 
 function SearchResult() {
   const [searchParams] = useSearchParams()
-  const { data, error, isLoading, isFetching, isUninitialized } =
+  const { data, isError, isLoading, isFetching, isUninitialized } =
     useGetSearchQuery(searchParams.get("q") as string, {
       skip: !searchParams.get("q"),
     })
 
-  if (error) {
+  if (isError) {
     return <h2>There was an error!!!</h2>
   }
 
@@ -29,10 +29,18 @@ function SearchResult() {
       ) : (
         <>
           {data.collection.items.map((element: SearchItem) => (
-            <SearchResultItem
-              item={element}
+            <Link
+              to={{
+                pathname: "/entry",
+                search: createSearchParams({
+                  nasa_id: element.data[0].nasa_id,
+                }).toString(),
+              }}
               key={element.data[0].nasa_id}
-            ></SearchResultItem>
+              className="Link"
+            >
+              <SearchResultItem item={element}></SearchResultItem>
+            </Link>
           ))}
         </>
       )}

@@ -1,0 +1,5 @@
+.Table th,
+.Table td {
+  text-align: start;
+  padding-right: 15px;
+}
