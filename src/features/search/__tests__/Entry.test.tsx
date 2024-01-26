@@ -102,4 +102,25 @@ describe("Entry", () => {
       expect(screen.getByAltText("Moon seen from the East")).toBeInTheDocument()
     })
   })
+
+  test("renders the title info of the response", async () => {
+    server.use(
+      http.get("https://images-api.nasa.gov/asset/test", () =>
+        HttpResponse.json(assetResponseImage),
+      ),
+      http.get("https://images-api.nasa.gov/search", () =>
+        HttpResponse.json(entryResponseImage),
+      ),
+    )
+    renderWithProviders(
+      <MemoryRouter initialEntries={["/entry?nasa_id=test"]}>
+        <Entry />
+      </MemoryRouter>,
+    )
+    await waitFor(() => {
+      expect(screen.getByRole("heading").textContent).toMatch(
+        /Moon seen from the East/i,
+      )
+    })
+  })
 })
