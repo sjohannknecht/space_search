@@ -29,3 +29,8 @@ h1 {
   font-family: AstroSpace, sans-serif;
   font-size: 3rem;
 }
+
+.Link {
+  text-decoration: none;
+  color: inherit;
+}
