@@ -1,5 +1,5 @@
 import "./App.css"
-import issUrl from "./assets/img/ISS_spacecraft_model_1.png"
+import issUrl from "./assets/img/ISS_spacecraft_model_1-600.png"
 import { createSearchParams, Link, Outlet, useNavigate } from "react-router-dom"
 import SearchBar from "./features/search/SearchBar"
 
